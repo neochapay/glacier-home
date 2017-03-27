@@ -139,6 +139,4 @@ OTHER_FILES += qml/*.qml \
 TRANSLATIONS += i18n/glacer-home.ts
 
 DISTFILES += \
-    i18n/glacer-home.ts \
-    qml/connectivity/ConnectionSelector.qml \
-    qml/statusbar/BatteryIndicator.qml
+    i18n/glacer-home.ts

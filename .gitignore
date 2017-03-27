@@ -1,0 +1,7 @@
+Makefile
+RPMS
+*.o
+moc*
+*.user
+documentation.list
+src/lipstick
