@@ -119,8 +119,10 @@ Page {
 
     Pager {
         id: pager
+        width: parent.width
+        height: parent.height-statusbar.height
+        anchors.top: statusbar.bottom
 
-        anchors.fill: parent
         model: VisualItemModel {
             AppLauncher {
                 id: launcher
