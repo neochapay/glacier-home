@@ -35,47 +35,42 @@ Item {
     property alias body: body.text
     property alias icon: icon.source
     width: Desktop.instance.parent.width
-    height: Desktop.instance.parent.height
+    height: Desktop.instance.parent.height-Math.min(Desktop.instance.parent.width,Desktop.instance.parent.height)/10
     rotation: Desktop.instance.parent.rotation
     x: Desktop.instance.parent.x
-    y: Desktop.instance.parent.y
-    Rectangle {
-        id: dimmer
-
-        height: Math.min(parent.width,parent.height)/14
-
-        anchors.top: parent.top
-        anchors.topMargin: notificationArea.notificationHeight
-        anchors.left: parent.left
-        anchors.right: parent.right
-
-        gradient: Gradient {
-            GradientStop { position: 1.0; color: "black" }
-            GradientStop { position: 0; color: "transparent" }
-        }
-    }
+    y: Math.min(Desktop.instance.parent.width,Desktop.instance.parent.height)/10
 
     MouseArea {
         id: notificationArea
-        property int notificationHeight: Math.min(parent.width,parent.height)/12
         property int notificationMargin: 14
         property int notificationIconSize: Math.min(parent.width,parent.height)/12
         anchors.top: parent.top
         anchors.left: parent.left
         width: notificationWindow.width
-        height: notificationArea.notificationHeight
+        height: notificationPreview.height
 
         onClicked: if (notificationPreviewPresenter.notification != null) notificationPreviewPresenter.notification.actionInvoked("default")
 
         Rectangle {
             id: notificationPreview
-            anchors {
-                fill: parent
-            }
+            width: parent.width
+            height: childrenRect.height+notificationArea.notificationMargin
             color: "transparent"
-            radius: 10
 
-            opacity: 0
+            Rectangle {
+                id: dimmer
+                color: "black"
+                anchors.fill: parent
+                opacity: 0.5
+            }
+
+            Rectangle{
+                id: line
+                color: "#0091e5"
+                anchors.top : parent.top
+                width: parent.width
+                height: 1
+            }
 
             states: [
                 State {
@@ -163,9 +158,10 @@ Item {
             Label {
                 id: body
                 anchors {
-                    top: summary.bottom
-                    left: summary.left
-                    right: summary.right
+                    left: icon.right
+                    leftMargin: notificationArea.notificationMargin
+                    verticalCenter: (summary.text != "") ? undefined : icon.verticalCenter
+                    top: (summary.text != "") ? summary.botton : undefined
                 }
                 font {
                     pointSize: 10
