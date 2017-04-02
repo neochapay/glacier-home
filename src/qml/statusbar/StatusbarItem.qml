@@ -3,7 +3,7 @@ import QtQuick.Layouts 1.0
 
 Item {
     height: parent.height
-    width: childrenRect.width
+    width: parent.height*0.6
 
     property alias source: icon.source
     property string panel_source
@@ -14,6 +14,11 @@ Item {
     Image {
         width: iconSize
         height: iconSize
+        sourceSize{
+            width: iconSize
+            height: iconSize
+        }
+
         id: icon
         anchors.centerIn: parent
         fillMode: Image.PreserveAspectFit

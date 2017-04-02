@@ -36,6 +36,7 @@ import QtQuick.Controls.Styles.Nemo 1.0
 import org.freedesktop.contextkit 1.0
 import MeeGo.Connman 0.2
 import org.nemomobile.lipstick 0.1
+import org.nemomobile.statusnotifier 1.0
 
 import "statusbar"
 
@@ -44,42 +45,61 @@ Item {
     z: 201
     height: Math.min(parent.width,parent.height)/10
     width: parent.width
-    anchors.bottom: parent.bottom
+    anchors.top: parent.top
 
-    Rectangle {
-        id: statusbar
-        color: "black"
-        anchors.fill: parent
-        opacity: 0.5
-        z: 200
+    StatusNotifierModel {
+        id: notifyModel
     }
-    Connections {
-        target: lipstickSettings;
-        onLockscreenVisibleChanged: {
-            if(lipstickSettings.lockscreenVisible) {
-                batteryChargePercentage.subscribe()
-                cellularSignalBars.subscribe()
-                cellularRegistrationStatus.subscribe()
-                cellularNetworkName.subscribe()
-                cellularDataTechnology.subscribe()
-            } else {
-                batteryChargePercentage.unsubscribe()
-                cellularSignalBars.unsubscribe()
-                cellularRegistrationStatus.unsubscribe()
-                cellularNetworkName.unsubscribe()
-                cellularDataTechnology.unsubscribe()
+
+    Rectangle{
+        id: statusbar
+        anchors.fill: parent
+        color: "transparent"
+        z: 200
+
+        Rectangle {
+            id: backStage
+            color: "black"
+            anchors.fill: parent
+            opacity: 0.5
+        }
+
+        BatteryIndicator{
+            id: batteryIndicator
+            anchors{
+                right: parent.right
+                rightMargin: height/4
             }
         }
-    }    
 
-    ContextProperty {
-        id: cellularSignalBars
-        key: "Cellular.SignalBars"
-    }
+        CelluralIndicator{
+            id: celluralSigualIndicator
+            anchors{
+                right: batteryIndicator.left
+                rightMargin: height/4
+            }
+            panel: SimPanel {}
+        }
 
-    ContextProperty {
-        id: cellularRegistrationStatus
-        key: "Cellular.RegistrationStatus"
+        WifiIndicator{
+            anchors{
+                right: celluralSigualIndicator.left
+                rightMargin: height/4
+            }
+        }
+
+
+        Label {
+            id: timeIndicator
+            font.pixelSize: root.height*0.6
+            text: Qt.formatDateTime(wallClock.time, "hh")+":"+Qt.formatDateTime(wallClock.time, "mm")
+
+            anchors{
+                left: parent.left
+                leftMargin: height/4
+                verticalCenter: parent.verticalCenter
+            }
+        }
     }
 
     ContextProperty {
@@ -92,32 +112,6 @@ Item {
         key: "Bluetooth.Connected"
     }
 
-    NetworkManager {
-        id: networkManager
-        function updateTechnologies() {
-            if (available && technologiesEnabled) {
-                wlan.path = networkManager.technologyPathForType("wifi")
-            }
-        }
-        onAvailableChanged: updateTechnologies()
-        onTechnologiesEnabledChanged: updateTechnologies()
-        onTechnologiesChanged: updateTechnologies()
-
-    }
-
-    NetworkTechnology {
-        id: wlan
-    }
-
-    ContextProperty {
-        id: cellularNetworkName
-        key: "Cellular.NetworkName"
-    }
-
-    ContextProperty {
-        id: cellularDataTechnology
-        key: "Cellular.DataTechnology"
-    }
 
     TechnologyModel {
         id: wifimodel
@@ -130,118 +124,9 @@ Item {
 
     Loader {
         id: panel_loader
-        anchors.bottom: root.top
+        anchors.top: root.bottom
         height: 240
         width: parent.width
         visible: false
-    }
-
-    RowLayout {
-        anchors.fill: statusbar
-        spacing: root.height/4
-        StatusbarItem {
-            iconSize: root.height/2
-            source: (cellularSignalBars.value > 0) ? "image://theme/icon_cell" + cellularSignalBars.value : "image://theme/icon_cell1"
-
-            MouseArea{
-                anchors.fill: parent
-                onPressAndHold: {
-                    var screenShotPath = "/home/nemo/Pictures/Screenshots/"
-                    var file = "glacier-screenshot-"+Qt.formatDateTime(new Date, "yyMMdd_hhmmss")+".png"
-
-                    Lipstick.takeScreenshot(screenShotPath + file);
-                }
-            }
-
-        }
-
-        StatusbarItem {
-            iconSize: root.height/2
-            Label {
-                id: tech
-                width: root.height/4
-                height: root.height/4
-                font.pixelSize: root.height/4+root.height/5
-                font.bold: true
-                wrapMode: Text.ElideRight
-                text: (cellularNetworkName.value !== "") ? cellularNetworkName.value.substring(0,3).toUpperCase() : "NA"
-            }
-
-            Label {
-                anchors.top: tech.bottom
-                anchors.topMargin: root.height/8
-                width: root.height/4
-                height: root/height/4
-                font.pixelSize: root.height/4+root.height/5
-                text: {
-                    var techToG = {gprs: "2", egprs: "2.5", umts: "3", hspa: "3.5", lte: "4", unknown: "0"}
-                    return techToG[cellularDataTechnology.value ? cellularDataTechnology.value : "unknown"] + "G"
-                }
-            }
-            panel: SimPanel {}
-        }
-
-        StatusbarItem {
-            iconSize: root.height/2
-            source: {
-                if (wlan.connected) {
-                    if (networkManager.defaultRoute.type !== "wifi")
-                        return "image://theme/icon_wifi_0"
-                    if (networkManager.defaultRoute.strength >= 59) {
-                        return "image://theme/icon_wifi_focused4"
-                    } else if (networkManager.defaultRoute.strength >= 55) {
-                        return "image://theme/icon_wifi_focused3"
-                    } else if (networkManager.defaultRoute.strength >= 50) {
-                        return "image://theme/icon_wifi_focused2"
-                    } else if (networkManager.defaultRoute.strength >= 40) {
-                        return "image://theme/icon_wifi_focused1"
-                    } else {
-                        return "image://theme/icon_wifi_normal4"
-                    }
-                } else {
-                    return "image://theme/icon_wifi_0"
-                }
-            }
-            panel: WifiPanel {}
-        }
-        StatusbarItem {
-            id: bluetootIndicator
-            iconSize: root.height/2
-            source: (bluetoothConnected.value) ? "image://theme/icon_bt_focused" : "image://theme/icon_bt_normal"
-            visible: bluetoothEnabled.value
-        }
-        StatusbarItem {
-            iconSize: root.height/2
-            source: "image://theme/icon_nfc_normal"
-        }
-        StatusbarItem {
-            iconSize: root.height/2
-            source: "image://theme/icon_gps_normal"
-        }
-        StatusbarItem {
-            iconSize: root.height/2
-            source: "image://theme/icon_play_pause"
-        }
-        StatusbarItem {
-            iconSize: root.height/2
-            Label {
-                id: hours
-                width: root.height/4
-                height: root.height/4
-                font.pixelSize: root.height/4+root.height/5
-                text: Qt.formatDateTime(wallClock.time, "hh")
-            }
-            Label {
-                id: minutes
-                anchors.top: hours.bottom
-                anchors.topMargin: root.height/8
-                width: root.height/4
-                height: root.height/4
-                font.pixelSize: root.height/4+root.height/5
-                text: Qt.formatDateTime(wallClock.time, "mm")
-            }
-        }
-
-        BatteryIndicator{}
     }
 }

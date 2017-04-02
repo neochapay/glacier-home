@@ -74,8 +74,10 @@ statusbar.path = /usr/share/lipstick-glacier-home-qt5/qml/statusbar
 statusbar.files = qml/statusbar/BatteryPanel.qml\
                 qml/statusbar/BatteryIndicator.qml \
                 qml/statusbar/CommonPanel.qml\
+                qml/statusbar/CelluralIndicator.qml\
                 qml/statusbar/SimPanel.qml\
                 qml/statusbar/WifiPanel.qml\
+                qml/statusbar/WifiIndicator.qml\
                 qml/statusbar/StatusbarItem.qml\
                 qml/statusbar/NumButton.qml
 
@@ -139,4 +141,6 @@ OTHER_FILES += qml/*.qml \
 TRANSLATIONS += i18n/glacer-home.ts
 
 DISTFILES += \
-    i18n/glacer-home.ts
+    i18n/glacer-home.ts \
+
+

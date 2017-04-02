@@ -3,6 +3,7 @@ import org.freedesktop.contextkit 1.0
 
 StatusbarItem {
     id: batteryIndicator
+
     property int chargeValue: 0
 
     ContextProperty {
