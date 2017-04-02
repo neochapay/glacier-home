@@ -43,6 +43,7 @@ import org.nemomobile.devicelock 1.0
 import "scripts/desktop.js" as Desktop
 
 Page {
+    id: desktop
     // This is used in the favorites page and in the lock screen
     WallClock {
         id: wallClock
@@ -55,11 +56,13 @@ Page {
         key: desktop.isPortrait ? "/desktop/meego/background/portrait/picture_filename" : "/desktop/meego/background/landscape/picture_filename"
         defaultValue: "/usr/share/lipstick-glacier-home-qt5/qml/images/graphics-wallpaper-home.jpg"
     }
-    id: desktop
+
     property alias lockscreen: lockScreen
     property alias switcher: switcher
     property int statusBarHeight: statusbar.height
     // Implements back key navigation
+
+    signal placeChanged()
 
     Keys.onReleased: {
         if (event.key === Qt.Key_Back) {
@@ -141,6 +144,10 @@ Page {
                 width: pager.width
                 height: pager.height
             }
+        }
+
+        onMovementStarted: {
+            desktop.placeChanged();
         }
 
         // Initial view should be the AppLauncher

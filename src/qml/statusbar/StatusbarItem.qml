@@ -2,6 +2,9 @@ import QtQuick 2.0
 import QtQuick.Layouts 1.0
 
 Item {
+    height: parent.height
+    width: childrenRect.width
+
     property alias source: icon.source
     property string panel_source
     property Component panel
@@ -26,5 +29,10 @@ Item {
                 panel_loader.visible = !panel_loader.visible
             }
         }
+    }
+
+    Connections{
+        target: desktop
+        onPlaceChanged : panel_loader.visible = false;
     }
 }
