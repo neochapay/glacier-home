@@ -54,27 +54,14 @@ GridView {
         anchors.top: parent.top
         property alias remove: remove
         property alias uninstall: uninstall
-        Rectangle {
-            id: remove
-            property alias text: removeLabel.text
-            visible: onUninstall
-            height: 110
-            color: "red"
-            width: gridview.width / 2
-            Label {
-                id: removeLabel
-                anchors.centerIn: parent
-                text: qsTr("Remove")
-                font.pointSize: 8
-            }
-        }
+
         Rectangle {
             id: uninstall
             property alias text: uninstallLabel.text
             anchors.left: remove.right
             visible: onUninstall
             color: "red"
-            width: gridview.width / 2
+            width: gridview.width
             height: 110
             Label {
                 id: uninstallLabel
