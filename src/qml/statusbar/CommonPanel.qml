@@ -45,11 +45,20 @@ Rectangle {
     height: 240
     width: root.width
     color: "transparent"
+    z: 201
 
     Rectangle{
         anchors.fill: parent
-        color: "#313131"
-        opacity: 0.3
+        color: "black"
+        opacity: 0.5
+    }
+
+    Rectangle{
+        id: line
+        color: "#0091e5"
+        anchors.top : parent.top
+        width: parent.width
+        height: 1
     }
 
     clip: true

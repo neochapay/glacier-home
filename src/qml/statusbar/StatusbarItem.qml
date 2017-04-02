@@ -16,6 +16,7 @@ Item {
         height: iconSize
         id: icon
         anchors.centerIn: parent
+        fillMode: Image.PreserveAspectFit
     }
     MouseArea {
         anchors.fill: parent
