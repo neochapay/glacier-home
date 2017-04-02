@@ -167,7 +167,6 @@ Item {
                 reorderItem = null
                 pager.interactive = true
                 gridview.onUninstall = false
-                deleter.remove.text = qsTr("Remove")
                 deleter.uninstall.text = qsTr("Uninstall")
 
                 reparent(gridview.contentItem)
@@ -184,16 +183,21 @@ Item {
         }
 
         function moved() {
+            if(y < 0)
+            {
+                deleter.uninstall.text = qsTr("Uninstalling") + " " + iconCaption
+            }
+            else
+            {
+                deleter.uninstall.text = qsTr("Uninstall")
+            }
+
             if (reordering) {
                 var gridViewPos = gridview.contentItem.mapFromItem(launcherItem, width/2, height/2)
                 var idx = gridview.indexAt(gridViewPos.x, gridViewPos.y)
-                var delPos = deleter.remove.mapFromItem(launcherItem, width/2, height/2)
-                var isdel = deleter.childAt(delPos.x, delPos.y)
-                if (isdel === deleter.remove) {
-                    deleter.remove.text = qsTr("Removing") + " " + iconCaption
-                } else if (isdel === deleter.uninstall) {
-                    deleter.uninstall.text = qsTr("Uninstalling") + " " + iconCaption
-                }
+
+
+
                 if (newIndex !== idx) {
                     reorderTimer.restart()
                     newIndex = idx

@@ -52,13 +52,12 @@ GridView {
     Item {
         id: deleter
         anchors.top: parent.top
-        property alias remove: remove
         property alias uninstall: uninstall
 
         Rectangle {
             id: uninstall
             property alias text: uninstallLabel.text
-            anchors.left: remove.right
+            anchors.left: parent.left
             visible: onUninstall
             color: "red"
             width: gridview.width
