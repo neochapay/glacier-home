@@ -3,5 +3,6 @@ RPMS
 *.o
 moc*
 *.user
+.directory
 documentation.list
 src/lipstick
