@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   height="20px"
+   version="1.1"
+   viewBox="0 0 20 20"
+   width="20px"
+   id="svg2"
+   inkscape:version="0.91 r13725"
+   sodipodi:docname="signal_0.svg">
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1366"
+     inkscape:window-height="693"
+     id="namedview12"
+     showgrid="false"
+     inkscape:zoom="33.37544"
+     inkscape:cx="11.838312"
+     inkscape:cy="6.5265197"
+     inkscape:window-x="0"
+     inkscape:window-y="264"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg2" />
+  <metadata
+     id="metadata16">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <desc
+     id="desc6" />
+  <defs
+     id="defs8" />
+  <path
+     id="path4142"
+     d="M 4.9570312,4.7890625 3.4687073,6.3353577 8.7890625,11.210938 0,20 20,20 20,19 Z M 10.203061,12.585337 16.000689,18.14303 4.7637146,17.992119 c 0.1498107,-0.08989 5.4393464,-5.406765 5.4393464,-5.406765 z"
+     style="fill:#ffffff;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     inkscape:connector-curvature="0"
+     sodipodi:nodetypes="cccccccccccc" />
+  <path
+     id="path4149"
+     d="m 11.595353,8.4046473 1.378259,1.3932401 5.033641,-5.0036794 -0.01498,9.812605 1.962521,1.827691 0.05992,-16.40427815 z"
+     style="fill:#ffffff;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+  <g
+     fill="none"
+     fill-rule="evenodd"
+     id="Page-1"
+     stroke="none"
+     stroke-width="1">
+    <g
+       id="Icons-Device"
+       transform="translate(-254.000000, -84.000000)"
+       fill="#000000">
+      <g
+         id="network-cell"
+         transform="translate(254.000000, 84.000000)" />
+    </g>
+  </g>
+</svg>
