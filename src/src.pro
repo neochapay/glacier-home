@@ -80,7 +80,9 @@ statusbar.files = qml/statusbar/BatteryPanel.qml\
                 qml/statusbar/WifiPanel.qml\
                 qml/statusbar/StatusbarItem.qml\
                 qml/statusbar/NumButton.qml \
-                qml/statusbar/MediaController.qml
+                qml/statusbar/MediaController.qml \
+                qml/statusbar/ExtendedStatusBar.qml \
+                qml/statusbar/ExtendedStatusBarButton.qml
 
 applauncher.path = /usr/share/lipstick-glacier-home-qt5/qml/applauncher
 applauncher.files = qml/applauncher/SearchListView.qml \
@@ -147,4 +149,3 @@ DISTFILES += \
     settings-plugins/*/*.qml \
     settings-plugins/*/*.json \
     settings-plugins/*/*.svg
-

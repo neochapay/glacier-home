@@ -1,7 +1,7 @@
 /****************************************************************************************
 **
 ** Copyright (C) 2014 Aleksi Suomalainen <suomalainen.aleksi@gmail.com>
-** Copyright (C) 2017 Sergey Chupligin <mail@neochapay.ru>
+** Copyright (C) 2017-2018 Sergey Chupligin <neochapay@gmail.com>
 ** All rights reserved.
 **
 ** You may use this file under the terms of BSD license as follows:
@@ -47,24 +47,33 @@ Item {
     height: Theme.itemHeightMedium
     width: parent.width
     anchors.bottom: parent.bottom
-    enabled: !lockscreenVisible()
+    visible: !lockscreenVisible()
     property bool panel_loaderVisible: panel_loader.visible
     property alias panel_loader: panel_loader
     property alias row: row
 
-
     Rectangle {
         id: statusbar
-        color: Theme.fillDarkColor
+        color: Theme.backgroundColor
         anchors.fill: parent
-        opacity: 0.5
-        z: 200
+        opacity: 0.5+0.5*((root.height-Theme.itemHeightMedium)/(desktop.height-Theme.itemHeightMedium))
+
+        Behavior on opacity {
+            NumberAnimation { duration: 100 }
+        }
+    }
+
+    Behavior on height{
+        NumberAnimation { duration: 100 }
     }
 
     MouseArea {
         property int oldX
         property int oldY
-        anchors.fill: row
+
+        property int moveY
+
+        anchors.fill: parent
         z: row.z + 10
         //enabled: !lockscreenVisible()
         onClicked: {
@@ -74,21 +83,55 @@ Item {
             }else {
                 row.currentChild = null
             }
+
+            if(root.height !== Theme.itemHeightMedium) {
+                hideExtendedStatusBarTimer.restart()
+            }
         }
 
         onPositionChanged: {
-            oldX = mouseX
-            oldY = mouseY
-            if(pressed && row.childAt(mouseX, mouseY)) {
-                if(row.currentChild !== row.childAt(mouseX, mouseY)) {
-                    row.currentChild = row.childAt(mouseX, mouseY)
-                    if(panel_loader.visible) panel_loader.visible = false
-                    row.currentChild.clicked()
+            if(root.height == row.height)
+            {
+                oldX = mouseX
+                oldY = mouseY
+
+                if(pressed && row.childAt(mouseX, mouseY)) {
+                    if(row.currentChild !== row.childAt(mouseX, mouseY)) {
+                        row.currentChild = row.childAt(mouseX, mouseY)
+                        if(panel_loader.visible) panel_loader.visible = false
+                        row.currentChild.clicked()
+                    }
+                } else {
+                    row.currentChild = null
                 }
-            } else {
-                row.currentChild = null
+            }
+
+            if(oldY < mouseY) {
+                moveY += mouseY-oldY
+            }
+            oldY = mouseY
+        }
+
+        onReleased: {
+            if(root.height != row.height){
+                if(moveY > Theme.itemHeightMedium) {
+                    root.height = Theme.itemHeightMedium
+                }
+            }
+            oldY = 0
+            oldX = 0
+            moveY = 0
+        }
+    }
+
+    Timer{
+        id: hideExtendedStatusBarTimer
+        onTriggered: {
+            if(root.height !== Theme.itemHeightMedium) {
+                root.height = Theme.itemHeightMedium
             }
         }
+        interval: 7000
     }
 
 
@@ -101,12 +144,36 @@ Item {
                 cellularRegistrationStatus.subscribe()
                 cellularNetworkName.subscribe()
                 cellularDataTechnology.subscribe()
+                root.height = Theme.itemHeightMedium
             } else {
                 batteryIndicator.batteryChargePercentage.unsubscribe()
                 cellularSignalBars.unsubscribe()
                 cellularRegistrationStatus.unsubscribe()
                 cellularNetworkName.unsubscribe()
                 cellularDataTechnology.unsubscribe()
+            }
+        }
+    }
+
+    Connections {
+        target: root
+        onHeightChanged: {
+            if(root.height === desktop.height) {
+                hideExtendedStatusBarTimer.start()
+            }else{
+                hideExtendedStatusBarTimer.stop()
+            }
+        }
+    }
+
+    Connections {
+        target: extendedStatusBar
+        onBrightnessSliderActivated: {
+            if(activated) {
+                statusbar.opacity = 0
+            }
+            else {
+                statusbar.opacity = 0.5+0.5*((root.height-Theme.itemHeightMedium)/(desktop.height-Theme.itemHeightMedium))
             }
         }
     }
@@ -198,10 +265,21 @@ Item {
         }
     }
 
+    ExtendedStatusBar{
+        id: extendedStatusBar
+        visible: parent.height != row.height
+    }
+
     RowLayout {
         id:row
-        anchors.fill: statusbar
+        anchors.bottom: statusbar.bottom
         spacing: Theme.itemSpacingSmall
+
+        height: Theme.itemHeightMedium
+        width: parent.width
+
+        visible: parent.height == row.height
+
         property var currentChild
         StatusbarItem {
             iconSize: Theme.itemHeightExtraSmall
