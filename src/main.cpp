@@ -21,14 +21,17 @@
 //
 // Copyright (c) 2012, Timur Kristóf <venemo@fedoraproject.org>
 
+#include "glacierwindowmodel.h"
+
 #include <homeapplication.h>
-#include <QFont>
 #include <homewindow.h>
 #include <lipstickqmlpath.h>
+
+#include <QFont>
 #include <QQmlEngine>
 #include <QQmlContext>
-#include "glacierwindowmodel.h"
 #include <QScreen>
+#include <QStandardPaths>
 
 int main(int argc, char **argv)
 {
@@ -58,7 +61,10 @@ int main(int argc, char **argv)
     }
     if (nativeOrientation == Qt::PrimaryOrientation)
         nativeOrientation = app.primaryScreen()->primaryOrientation();
+
     app.engine()->rootContext()->setContextProperty("nativeOrientation", nativeOrientation);
+    app.engine()->rootContext()->setContextProperty("homePath", QStandardPaths::HomeLocation);
+
     qmlRegisterType<GlacierWindowModel>("org.nemomobile.glacier", 1, 0 ,"GlacierWindowModel");
     app.setQmlPath("/usr/share/lipstick-glacier-home-qt5/qml/MainScreen.qml");
     // Give these to the environment inside the lipstick homescreen

@@ -284,17 +284,6 @@ Item {
         StatusbarItem {
             iconSize: Theme.itemHeightExtraSmall
             source: (cellularSignalBars.value > 0) ? "image://theme/icon_cell" + cellularSignalBars.value : "image://theme/icon_cell1"
-
-            MouseArea{
-                anchors.fill: parent
-                onPressAndHold: {
-                    var screenShotPath = "/home/nemo/Pictures/Screenshots/"
-                    var file = "glacier-screenshot-"+Qt.formatDateTime(new Date, "yyMMdd_hhmmss")+".png"
-
-                    Lipstick.takeScreenshot(screenShotPath + file);
-                }
-            }
-
         }
 
         StatusbarItem {

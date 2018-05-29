@@ -38,6 +38,8 @@ import org.nemomobile.lipstick 0.1
 
 import MeeGo.Connman 0.2
 
+import Nemo.Dialogs 1.0
+
 Item {
     id: extendedStatusBar
     width: desktop.width
@@ -50,6 +52,44 @@ Item {
 
     DisplaySettings{
         id: displaySettings
+    }
+
+    NetworkManagerFactory {
+        id: connMgr
+    }
+
+    Connections{
+        target: extendedStatusBar.parent
+        onHeightChanged: {
+            airoplaneModeDialog.close();
+        }
+    }
+
+    QueryDialog{
+        id: airoplaneModeDialog
+        visible: false
+
+        inline: false
+        bgOpacity: 1
+
+        icon: "image://theme/exclamation-triangle"
+
+        cancelText: qsTr("Cancel")
+        acceptText: qsTr("Ok")
+        headingText: qsTr("Disable all network interfaces ?")
+        subLabelText: qsTr("Do you want to continue ?")
+
+        onCanceled: {
+            airoplaneModeDialog.close()
+        }
+
+        onAccepted: {
+            if(airoplaneButton.activated) {
+                connMgr.instance.offlineMode = false;
+            } else {
+                connMgr.instance.offlineMode = true;
+            }
+        }
     }
 
     Row{
@@ -298,6 +338,16 @@ Item {
 
             icon: "image://theme/plane"
             label: qsTr("Airoplane Mode")
+
+            activated: connMgr.instance.offlineMode == true
+
+            onClicked: {
+                if(airoplaneButton.activated) {
+                    connMgr.instance.offlineMode = false;
+                } else {
+                    airoplaneModeDialog.open();
+                }
+            }
         }
 
         ExtendedStatusBarButton{
