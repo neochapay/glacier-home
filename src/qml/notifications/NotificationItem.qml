@@ -2,6 +2,8 @@ import QtQuick 2.6
 import QtQuick.Controls.Nemo 1.0
 import QtQuick.Controls.Styles.Nemo 1.0
 
+import org.nemomobile.configuration 1.0
+
 Item {
     id: notifyArea
 
@@ -11,6 +13,13 @@ Item {
         left: parent.left
         leftMargin: Theme.itemSpacingSmall
     }
+
+    ConfigurationValue{
+        id: showNotifiBody
+        key: "/home/glacier/lockScreen/showNotifiBody"
+        defaultValue: false
+    }
+
 
     property alias appIcon: appIcon
     property alias appBody: appBody
@@ -46,7 +55,7 @@ Item {
         onClicked: {
             if (modelData.userRemovable) {
                 slideAnimation.start()
-            } else {
+            } else if(!LipstickSettings.lockscreenVisible) {
                 modelData.actionInvoked("default")
             }
         }
@@ -197,6 +206,8 @@ Item {
             top: parent.top
             topMargin: Theme.itemSpacingSmall
         }
+        verticalAlignment: Text.AlignVCenter
+        height: appSummary.visible ? undefined : notifyArea.height-Theme.itemSpacingSmall*2
     }
 
     Label {
@@ -229,6 +240,12 @@ Item {
         }
         maximumLineCount: 1
         elide: Text.ElideRight
+
+        visible: if(LipstickSettings.lockscreenVisible) {
+                     return showNotifiBody.value
+                 } else {
+                     return true
+                 }
     }
 
     Label {
@@ -245,5 +262,11 @@ Item {
         }
         maximumLineCount: 1
         elide: Text.ElideRight
+
+        visible: if(LipstickSettings.lockscreenVisible) {
+                     return showNotifiBody
+                 } else {
+                     return true
+                 }
     }
 }
