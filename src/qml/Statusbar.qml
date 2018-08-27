@@ -52,7 +52,7 @@ Item {
     width: parent.width
     anchors.top: parent.top
 
-    ControlCenter{ 
+    ControlCenter{
         id: ctrlCenter
     }
 
@@ -167,6 +167,19 @@ Item {
         onPoweredChanged: {
             if (powered)
                 wifimodel.requestScan()
+        }
+    }
+
+    TechnologyModel {
+        id: gpsModel
+        name: "gps"
+
+        onTechnologiesChanged: {
+            gpsIndicator.visible = gpsModel.powered
+        }
+
+        onPoweredChanged: {
+            gpsIndicator.visible = gpsModel.powered
         }
     }
 
