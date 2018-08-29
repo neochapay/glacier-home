@@ -76,6 +76,9 @@ Page {
     property bool codepadVisible: false
     property bool deviceLocked: DeviceLock.state >= DeviceLock.Locked
 
+    property bool statusbarPanelVisible: statusbar.panel_loaderVisible
+    property alias statusbar: statusbar
+
     // Implements back key navigation
 
     Keys.onReleased: {
@@ -114,6 +117,8 @@ Page {
     Component.onCompleted: {
         Lipstick.compositor.screenOrientation = nativeOrientation
         LipstickSettings.lockScreen(true)
+
+        Desktop.instance = desktop
     }
 
     Connections {

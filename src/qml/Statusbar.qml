@@ -52,6 +52,12 @@ Item {
     width: parent.width
     anchors.top: parent.top
 
+    enabled: !lockscreenVisible()
+
+    property bool panel_loaderVisible: panel_loader.visible
+    property alias panel_loader: panel_loader
+    property alias ctrlCenter: ctrlCenter
+
     ControlCenter{
         id: ctrlCenter
     }
@@ -215,6 +221,7 @@ Item {
     }
 
     Row {
+        id: row
         anchors.fill: statusbar
         spacing: statusbar.height / 3
 
@@ -351,16 +358,6 @@ Item {
             onClicked: {
                 //Do the stuff to show the menu
                 ctrlCenter.setControlCenterState( !ctrlCenter.getControlCenterState() )
-            }
-            onReleased: {
-                rumbleEffect.start();  // plays a rumble effect
-                buttonUp.play();
-                statusbarPressFeedback.visible = false
-            }
-            onPressed: {
-                rumbleEffect.start();  // plays a rumble effect
-                buttonDown.play();
-                statusbarPressFeedback.visible = true
             }
         }
 

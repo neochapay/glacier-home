@@ -31,7 +31,6 @@
 
 import QtQuick 2.1
 import QtQuick.Window 2.1
-import QtQuick.Layouts 1.0
 import QtQuick.Controls.Nemo 1.0
 import QtQuick.Controls.Styles.Nemo 1.0
 import QtGraphicalEffects 1.0
@@ -45,9 +44,8 @@ import org.nemomobile.lipstick 0.1
 
 import "controlcenter"
 
-//Area to return
-MouseArea{
-    id: controlCenterArea
+Item{
+    id: controlCenterAea
     property bool controlCenterState: false //Is control center enabled or disabled?
 
     width: Screen.width
@@ -55,91 +53,108 @@ MouseArea{
     visible: controlCenterState
     state: "hide"
 
-    Rectangle{
-        id: controlCenterOutAreaDim
-        anchors.fill: parent
-        color: "black"
-        opacity:0.5
+    function show() {
+        setControlCenterState(true)
+    }
+
+    function hide() {
+        setControlCenterState(false)
     }
 
     //Control Center area
-    MouseArea{
+    Rectangle {
+        id: controlCenter
         width: parent.width
-        height: parent.width
+        height: childrenRect.height
+        color: Theme.backgroundColor
 
-        Rectangle {
-            id: controlCenter
-            width: parent.width
-            height: parent.width
-            color: Theme.backgroundColor
-            radius:32
-            x:0
-            y:0
+        Rectangle{
+            id: controlCenterOutAreaDim
+            anchors.fill: parent
+            color: "black"
+            opacity:0.5
+        }
 
-            RowLayout {
-                id: layout
+        x:0
+        y:0
 
-                anchors.top: parent.top
-                anchors.topMargin: size.dp(40 + 22)
-                width: parent.width
-                height: size.dp(86)
+        Row {
+            id: controlsLayout
 
-                ControlButton{
-                    image: "image://theme/wifi"
-                    textLabel: qsTr("Wi-Fi")
-                }
-                ControlButton{
-                    image: "image://theme/bluetooth"
-                    textLabel: qsTr("Bluetooth")
-                }
-                ControlButton{
-                    image: "image://theme/exchange-alt"
-                    textLabel: qsTr("Data")
-                }
-                ControlButton{
-                    image: "image://theme/map-marker-alt"
-                    textLabel: qsTr("Location")
-                }
-                ControlButton{
-                    image: "image://theme/moon"
-                    textLabel: qsTr("Quiet")
-                }
+            anchors{
+                top: parent.top
+                topMargin: Theme.itemSpacingHuge
             }
 
-            GridView{
-                id: notifyLayout
+            width: parent.width
+            height: childrenRect.height+Theme.itemSpacingExtraSmall
 
-                anchors{
-                    top: layout.bottom
-                    topMargin: size.dp(62)
-                    left: controlCenterArea.left
-                    leftMargin: size.dp(31)
-                }
 
-                width: parent.width
+            ControlButton{
+                width: parent.width/5
+                image: "image://theme/wifi"
+                textLabel: qsTr("Wi-Fi")
+            }
+            ControlButton{
+                width: parent.width/5
+                image: "image://theme/bluetooth"
+                textLabel: qsTr("Bluetooth")
+            }
+            ControlButton{
+                width: parent.width/5
+                image: "image://theme/exchange-alt"
+                textLabel: qsTr("Data")
+            }
+            ControlButton{
+                width: parent.width/5
+                image: "image://theme/map-marker-alt"
+                textLabel: qsTr("Location")
+            }
+            ControlButton{
+                width: parent.width/5
+                image: "image://theme/moon"
+                textLabel: qsTr("Quiet")
+            }
+        }
 
-                cellWidth: parent.width/5
-                cellHeight: cellWidth
+        GridView{
+            id: notifyLayout
 
-                model: statusNotiferModel
-                delegate: ControlButton{
-                    width: notifyLayout.cellWidth;
-                    height: notifyLayout.cellHeight
-                    image: notifierItem.icon
-                    textLabel: notifierItem.title
+            anchors{
+                top: controlsLayout.bottom
+                topMargin: size.dp(62)
+                left: controlCenterAea.left
+                leftMargin: size.dp(31)
+            }
 
-                    onClicked: {
-                        notifierItem.activate()
-                    }
+            width: parent.width
+
+            cellWidth: parent.width/5
+            cellHeight: cellWidth
+
+            model: statusNotiferModel
+            delegate: ControlButton{
+                width: notifyLayout.cellWidth;
+                height: notifyLayout.cellHeight
+                image: notifierItem.icon
+                textLabel: notifierItem.title
+
+                onClicked: {
+                    notifierItem.activate()
                 }
             }
         }
-    }
 
-    //Close the thing if background is tapped
-    onClicked: {
-        //Do the stuff to show the menu
-        setControlCenterState( false )
+        InverseMouseArea {
+            id: closeMouseArea
+            anchors.fill: parent
+            enabled: controlCenterAea.controlCenterState != false
+            parent: controlCenter
+
+            onPressed: {
+                controlCenterAea.hide()
+            }
+        }
     }
 
     function setControlCenterState(enabled) {
