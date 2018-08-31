@@ -6,10 +6,10 @@ import QtQuick.Controls.Styles.Nemo 1.0
 Item {
     id: contolButton
     property string image: "image://theme/image"
-    property string buttonColor: "#1f1f1f"
     property string textLabel: "Toggle"
 
     property bool enabled: false
+    property bool activated: false
 
     signal clicked();
 
@@ -43,7 +43,9 @@ Item {
 
             layer.effect: ShaderEffect {
                 id: shaderItem
-                property color color: contolButton.enabled  ?  Theme.accentColor : Theme.textColor
+                property color color: contolButton.enabled  ?
+                                          contolButton.activated ? Theme.accentColor : Theme.textColor
+                                          : Theme.fillColor
 
                 fragmentShader: "
                         varying mediump vec2 qt_TexCoord0;

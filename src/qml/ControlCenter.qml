@@ -90,25 +90,28 @@ Item{
             height: childrenRect.height+Theme.itemSpacingExtraSmall
 
 
-            ControlButton{
+            NetworkControlButton{
                 width: parent.width/5
                 image: "image://theme/wifi"
                 textLabel: qsTr("Wi-Fi")
+                networkingModel: "wifi"
             }
-            ControlButton{
+            NetworkControlButton{
                 width: parent.width/5
                 image: "image://theme/bluetooth"
                 textLabel: qsTr("Bluetooth")
+                networkingModel: "bluetooth"
             }
-            ControlButton{
+            NetworkControlButton{
                 width: parent.width/5
                 image: "image://theme/exchange-alt"
                 textLabel: qsTr("Data")
             }
-            ControlButton{
+            NetworkControlButton{
                 width: parent.width/5
                 image: "image://theme/map-marker-alt"
                 textLabel: qsTr("Location")
+                networkingModel: "gps"
             }
             ControlButton{
                 width: parent.width/5
