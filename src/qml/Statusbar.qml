@@ -316,6 +316,8 @@ Item {
                     }
                 } else if (wlan.connected) {
                     return "image://theme/icon_wifi_touch"
+                } else{
+                    return "/usr/share/lipstick-glacier-home-qt5/qml/theme/icon_wifi_0.png"
                 }
             }
         }
