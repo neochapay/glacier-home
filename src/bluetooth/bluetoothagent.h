@@ -1,10 +1,3 @@
-#ifndef BLUETOOTHAGENT_H
-#define BLUETOOTHAGENT_H
-
-#include <QObject>
-
-#include <QDBusObjectPath>
-#include <agent.h>
 // This file is part of glacier-home, a nice user experience for NemoMobile.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -27,6 +20,13 @@
 //
 // Copyright (c) 2020, Chupligin Sergey <neochapay@gmail.com>
 
+#ifndef BLUETOOTHAGENT_H
+#define BLUETOOTHAGENT_H
+
+#include <QObject>
+#include <QDBusObjectPath>
+
+#include <agent.h>
 #include <adapter.h>
 
 #include <request.h>
@@ -36,12 +36,24 @@
 class BluetoothAgent : public BluezQt::Agent
 {
     Q_OBJECT
+
 public:
     BluetoothAgent(QObject *parent = Q_NULLPTR);
     QDBusObjectPath objectPath() const;
     Capability capability() const;
 
     void requestConfirmation(BluezQt::DevicePtr device, const QString &passkey, const BluezQt::Request<> &request);
+    void requestAuthorization(BluezQt::DevicePtr device, const BluezQt::Request<> &request);
+    void authorizeService(BluezQt::DevicePtr device, const QString &uuid, const BluezQt::Request<> &request);
+
+    void requestPinCode(BluezQt::DevicePtr device, const BluezQt::Request<QString> &request);
+    void displayPinCode(BluezQt::DevicePtr device, const QString &pinCode);
+
+    void requestPasskey(BluezQt::DevicePtr device, const BluezQt::Request<quint32> &request);
+    void displayPasskey(BluezQt::DevicePtr device, const QString &passkey, const QString &entered);
+
+    void cancel();
+    void release();
 
     Q_INVOKABLE void registerAgent();
 

@@ -129,6 +129,54 @@ void BluetoothAgent::requestConfirmation(BluezQt::DevicePtr device, const QStrin
                            passkey);
 }
 
+void BluetoothAgent::authorizeService(BluezQt::DevicePtr device, const QString &uuid, const BluezQt::Request<> &request)
+{
+    qWarning() << "TODO";
+    qDebug() << "AuthorizeService()" << device->address() << device->name() << uuid;
+}
+
+void BluetoothAgent::requestAuthorization(BluezQt::DevicePtr device, const BluezQt::Request<> &request)
+{
+    qWarning() << "TODO";
+    qDebug() << "RequestAuthorization()" << device->address() << device->name();
+}
+
+void BluetoothAgent::requestPinCode(BluezQt::DevicePtr device, const BluezQt::Request<QString> &request)
+{
+    qWarning() << "TODO";
+    qDebug() << "RequestPinCode()" << device->address() << device->name();
+}
+
+void BluetoothAgent::displayPinCode(BluezQt::DevicePtr device, const QString &pinCode)
+{
+    qWarning() << "TODO";
+    qDebug() << "DisplayPinCode()" << device->address() << device->name() << pinCode;
+}
+
+void BluetoothAgent::requestPasskey(BluezQt::DevicePtr device, const BluezQt::Request<quint32> &request)
+{
+    qWarning() << "TODO";
+    qDebug() << "RequestPasskey()" << device->address() << device->name();
+}
+
+void BluetoothAgent::displayPasskey(BluezQt::DevicePtr device, const QString &passkey, const QString &entered)
+{
+    qWarning() << "TODO";
+    qDebug() << "DisplayPasskey()" << device->address() << device->name() << passkey << entered;
+}
+
+void BluetoothAgent::cancel()
+{
+    qWarning() << "TODO";
+    qDebug() << "BlueZ agent: Cancel()";
+}
+
+void BluetoothAgent::release()
+{
+    qWarning() << "TODO";
+    qDebug() << "BlueZ agent: Release()";
+}
+
 void BluetoothAgent::initManagerJobResult(BluezQt::InitManagerJob *job)
 {
     if (job->error())
