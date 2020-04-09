@@ -32,12 +32,13 @@ Requires:   libqofonoext-declarative
 Requires:   qt5-qtmultimedia-plugin-audio-pulseaudio
 
 BuildRequires:  cmake
+BuildRequires:  extra-cmake-modules >= 5.68.0
 BuildRequires:  pkgconfig(Qt5Core)
 BuildRequires:  pkgconfig(Qt5Quick)
 BuildRequires:  pkgconfig(lipstick-qt5) >= 0.12.0
-BuildRequires:  pkgconfig(Qt5Compositor)
+BuildRequires:  pkgconfig(Qt5WaylandCompositor)
 BuildRequires:  pkgconfig(nemodevicelock)
-BuildRequires:  pkgconfig(KF5BluezQt)
+BuildRequires:  kf5bluezqt-bluez5-devel >= 5.68.0
 
 Provides: lipstick-colorful-home-qt5
 
@@ -50,17 +51,18 @@ A homescreen for Nemo Mobile
 %setup -q -n %{name}-%{version}
 
 %build
-cmake -B build \
+cmake \
 	-DCMAKE_BUILD_TYPE=Release \
 	-DCMAKE_INSTALL_PREFIX=%{_prefix} \
-	-DCMAKE_INSTALL_LIBDIR=%{_lib} \
+        -DCMAKE_INSTALL_LIBDIR=%{_libdir} \
+        -DCMAKE_INSTALL_SYSCONFDIR=%{_sysconfdir} \
 	-DCMAKE_VERBOSE_MAKEFILE=ON \
 	.
-cmake --build build
+cmake --build .
 
 %install
 rm -rf %{buildroot}
-DESTDIR=$RPM_BUILD_ROOT cmake --build build --target install
+DESTDIR=$RPM_BUILD_ROOT cmake --build . --target install
 
 mkdir -p %{buildroot}%{_libdir}/systemd/user/user-session.target.wants/
 ln -s ../lipstick.service %{buildroot}%{_libdir}/systemd/user/user-session.target.wants/lipstick.service

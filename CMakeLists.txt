@@ -13,13 +13,16 @@ include(FindPkgConfig)
 include(FeatureSummary)
 include(GNUInstallDirs)
 
-set(QT_MIN_VERSION "5.6.0")
+set(QT_MIN_VERSION "5.9.0")
 find_package(Qt5 COMPONENTS Gui Qml Quick DBus LinguistTools REQUIRED)
-if(QT_VERSION EQUAL "5.6.0")
+if(QT_VERSION EQUAL "5.9.0")
 	find_package(Qt5 COMPONENTS Compositor REQUIRED)
 else()
 	find_package(Qt5 COMPONENTS WaylandCompositor REQUIRED)
 endif()
+
+option (USE_SYSTEMD "Use systemd services" ON)
+
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(LIPSTICK lipstick-qt5 REQUIRED IMPORTED_TARGET)
 pkg_check_modules(NEMODEVICELOCK nemodevicelock REQUIRED IMPORTED_TARGET)
@@ -33,13 +36,15 @@ include(KDECMakeSettings)
 
 add_subdirectory(src)
 
-if(EXISTS /run/systemd/system)
+if(USE_SYSTEMD)
 	install(FILES data/lipstick.service
 		DESTINATION ${CMAKE_INSTALL_LIBDIR}/systemd/user)
 endif()
 
 install(FILES data/glacier-home.privileges
 	DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/mapplauncherd/privileges.d)
+install(FILES data/nemovars.conf
+        DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/lipstick-glacier-home-qt5)
 install(FILES
 		data/90-glacier-powerkey.conf
 		data/90-glacier-devlock.conf
