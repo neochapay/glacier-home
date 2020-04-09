@@ -1,10 +1,3 @@
-#ifndef BLUETOOTHAGENT_H
-#define BLUETOOTHAGENT_H
-
-#include <QObject>
-
-#include <QDBusObjectPath>
-#include <agent.h>
 // This file is part of glacier-home, a nice user experience for NemoMobile.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -27,11 +20,18 @@
 //
 // Copyright (c) 2020, Chupligin Sergey <neochapay@gmail.com>
 
-#include <adapter.h>
+#ifndef BLUETOOTHAGENT_H
+#define BLUETOOTHAGENT_H
 
-#include <request.h>
-#include <manager.h>
-#include <pendingcall.h>
+#include <QObject>
+
+#include <QDBusObjectPath>
+
+#include <bluezqt/agent.h>
+#include <bluezqt/adapter.h>
+#include <bluezqt/request.h>
+#include <bluezqt/manager.h>
+#include <bluezqt/pendingcall.h>
 
 class BluetoothAgent : public BluezQt::Agent
 {

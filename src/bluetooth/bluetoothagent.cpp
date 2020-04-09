@@ -19,11 +19,12 @@
 // SOFTWARE.
 //
 // Copyright (c) 2020, Chupligin Sergey <neochapay@gmail.com>
+#include <QDebug>
 
 #include "bluetoothagent.h"
 
-#include <device.h>
-#include <initmanagerjob.h>
+#include <bluezqt/device.h>
+#include <bluezqt/initmanagerjob.h>
 
 BluetoothAgent::BluetoothAgent(QObject *parent)
     : BluezQt::Agent(parent)
@@ -70,7 +71,7 @@ void BluetoothAgent::pair(const QString &btMacAddress)
         return;
     }
 
-    BluezQt::PendingCall *pcall = m_manager->pairWithDevice(btMacAddress);
+    BluezQt::PendingCall *pcall = device->pair();
     pcall->setUserData(btMacAddress);
 
     connect(pcall, &BluezQt::PendingCall::finished,
